@@ -199,12 +199,18 @@ function compareXml(userXml, method, rawXml) {
             }
             return;
         }
+    
         const type = node2.getAttribute('type');
-        const value = node1.textContent.trim();
+        const value = node1.textContent.trim(); // Remove espaços em branco no valor
         const line = getLineFromRawXml(node1.localName, rawXml, value);
         const length = parseInt(node2.getAttribute('length'), 10);
         const maxLength = parseInt(node2.getAttribute('maxlength'), 10);
         const isOptional = node2.getAttribute('optional') === 'true';
+    
+        // Verificar se uma tag obrigatória está vazia ou contém apenas espaços em branco
+        if (!isOptional && (value === null || value === '')) {
+            errors.push(`Erro na tag <${node1.localName}> na linha ${line}: O valor é obrigatório e não pode estar vazio.`);
+        }
     
         // Validação de tipo
         if (type === 'N') {
@@ -227,11 +233,10 @@ function compareXml(userXml, method, rawXml) {
             (node2.localName === 'NumeroNfseInicial' && length && value.length !== length && type === 'N') ||
             (node2.localName === 'NumeroNfseFinal' && length && value.length !== length && type === 'N') ||
             (node2.localName === 'Numero' && length && value.length !== length && type === 'N')
-            
         ) {
             errors.push(`Erro na tag <${node1.localName}> na linha ${line}: O valor deve ter exatamente ${length} caracteres. Encontrado: "${value}".`);
         }
-
+    
         // Validação de comprimento máximo para outras tags
         if (maxLength && value.length > maxLength) {
             if (isOptional) {
