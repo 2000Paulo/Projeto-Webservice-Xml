@@ -172,11 +172,22 @@ function compareXml(userXml, method, rawXml) {
     const templateXml = new DOMParser().parseFromString(xmlTemplates[method], 'text/xml');
     const errors = [];
 
-    function getLineFromRawXml(tag, rawXml) {
-        const index = rawXml.indexOf(tag);
-        if (index === -1) return 'desconhecida';
-        const lines = rawXml.substring(0, index).split('\n');
-        return lines.length;
+    function getLineFromRawXml(tag, rawXml, value) {
+        const tagRegex = new RegExp(`<${tag}[^>]*>(.*?)<\\/${tag}>`, 'g');
+        let match;
+        let line = 'desconhecida';
+    
+        // Iterar por todas as ocorrências da tag
+        while ((match = tagRegex.exec(rawXml)) !== null) {
+            if (match[1].trim() === value.trim()) {
+                const index = match.index;
+                const lines = rawXml.substring(0, index).split('\n');
+                line = lines.length;
+                break;
+            }
+        }
+    
+        return line;
     }
 
     function validateNode(node1, node2, path = '') {
@@ -188,10 +199,10 @@ function compareXml(userXml, method, rawXml) {
             }
             return;
         }
-    
+        // console.log(node2);
         const type = node2.getAttribute('type');
         const value = node1.textContent.trim();
-        const line = getLineFromRawXml(`<${node1.localName}>`, rawXml);
+        const line = getLineFromRawXml(node1.localName, rawXml, value);
         const length = parseInt(node2.getAttribute('length'), 10);
         const maxLength = parseInt(node2.getAttribute('maxlength'), 10);
         const isOptional = node2.getAttribute('optional') === 'true';
@@ -209,8 +220,11 @@ function compareXml(userXml, method, rawXml) {
         if (
             (node2.localName === 'Cpf' && length && value.length !== length) ||
             (node2.localName === 'Cnpj' && length && value.length !== length) ||
+            (node2.localName === 'NumeroNfse' && length && value.length !== length && type === 'N') ||
             (node2.localName === 'Numero' && length && value.length !== length && type === 'N')
+            
         ) {
+            console.log(node1,node2);
             errors.push(`Erro na tag <${node1.localName}> na linha ${line}: O valor deve ter exatamente ${length} caracteres. Encontrado: "${value}".`);
         }
     
