@@ -199,7 +199,6 @@ function compareXml(userXml, method, rawXml) {
             }
             return;
         }
-        // console.log(node2);
         const type = node2.getAttribute('type');
         const value = node1.textContent.trim();
         const line = getLineFromRawXml(node1.localName, rawXml, value);
@@ -208,8 +207,12 @@ function compareXml(userXml, method, rawXml) {
         const isOptional = node2.getAttribute('optional') === 'true';
     
         // Validação de tipo
-        if (type === 'N' && !/^\d+(\.\d+)?$/.test(value)) {
-            errors.push(`Erro na tag <${node1.localName}> na linha ${line}: Esperado valor numérico. Encontrado: "${value}".`);
+        if (type === 'N') {
+            if (!/^\d+(\.\d+)?$/.test(value)) {
+                errors.push(`Erro na tag <${node1.localName}> na linha ${line}: Esperado valor numérico. Encontrado: "${value}".`);
+            } else if (parseFloat(value) <= 0) {
+                errors.push(`Erro na tag <${node1.localName}> na linha ${line}: O valor deve ser maior que 0. Encontrado: "${value}".`);
+            }
         } else if (type === 'C' && typeof value !== 'string') {
             errors.push(`Erro na tag <${node1.localName}> na linha ${line}: Esperado valor de caracteres. Encontrado: "${value}".`);
         } else if (type === 'T' && !/^\d{4}-\d{2}-\d{2}$/.test(value)) {
@@ -221,13 +224,14 @@ function compareXml(userXml, method, rawXml) {
             (node2.localName === 'Cpf' && length && value.length !== length) ||
             (node2.localName === 'Cnpj' && length && value.length !== length) ||
             (node2.localName === 'NumeroNfse' && length && value.length !== length && type === 'N') ||
+            (node2.localName === 'NumeroNfseInicial' && length && value.length !== length && type === 'N') ||
+            (node2.localName === 'NumeroNfseFinal' && length && value.length !== length && type === 'N') ||
             (node2.localName === 'Numero' && length && value.length !== length && type === 'N')
             
         ) {
-            console.log(node1,node2);
             errors.push(`Erro na tag <${node1.localName}> na linha ${line}: O valor deve ter exatamente ${length} caracteres. Encontrado: "${value}".`);
         }
-    
+
         // Validação de comprimento máximo para outras tags
         if (maxLength && value.length > maxLength) {
             if (isOptional) {
