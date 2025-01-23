@@ -1,0 +1,140 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-image: url('./imgs/background.jpg'); /* Certifique-se de que o caminho está correto */
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    color: #333; /* Texto em tom mais escuro para contraste */
+}
+
+.container {
+    max-width: 600px;
+    margin: 50px auto;
+    background-color: rgba(255, 255, 255, 1); /* Fundo branco translúcido */
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Sombra para destacar o conteúdo */
+    text-align: center;
+}
+
+h1 {
+    background-color: #555; /* Cor verde elegante */
+    color: white;
+    padding: 15px;
+    border-radius: 5px;
+    font-size: 1.8em;
+    margin-bottom: 20px;
+}
+
+label {
+    font-weight: bold;
+    display: block;
+    margin: 15px 0 5px;
+    color: #555;
+}
+
+select, input[type="file"], button {
+    width: 95%;
+    padding: 10px;
+    margin: 10px 0;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 1em;
+    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
+    background-color: #f9f9f9;
+    transition: all 0.3s ease;
+}
+
+select:focus, input[type="file"]:focus, button:focus {
+    border-color: #03Bb85;
+    outline: none;
+    box-shadow: 0 0 5px rgba(40, 167, 69, 0.5);
+    
+}
+
+button {
+    background-color: #03Bb85;
+    color: white;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+button:hover {
+    background-color: #0c8f68;
+}
+
+/* #result {
+    margin-top: 20px;
+    padding: 15px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background-color: #f9f9f9;
+    font-size: 1em;
+    display: block; /* Garante que sempre aparecerá */
+
+
+#result.error {
+    border-color: #dc3545;
+    background-color: #f8d7da;
+    color: #721c24;
+    margin-top: 20px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 15px;
+    font-size: 1em;
+    display: block; /* Garante que sempre aparecerá */
+}
+
+#result.success {
+    border-color: #03Bb85;
+    background-color: #d4edda;
+    color: #155724;
+    margin-top: 20px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 15px;
+    font-size: 1em;
+    display: block; 
+}
+
+footer {
+    text-align: center;
+    margin-top: 20px;
+    font-size: 0.9em;
+    color: #777;
+}
+
+
+#result ul {
+    list-style-type: none; /* Remove os marcadores padrão */
+    padding: 0;
+    margin: 0;
+}
+
+#result ul li {
+    margin-bottom: 10px;
+    padding: 10px;
+    border-radius: 5px;
+    background-color: #fff3cd; /* Fundo amarelo para avisos */
+    color: #f30606; /* Texto para avisos */
+    border: 1px solid #bdb5a0; /* Borda para destacar o aviso */
+    font-size: 0.95em;
+    text-align: left;
+    font-weight: bold;
+}
+
+#result ul li.error {
+    background-color: #f8d7da; /* Fundo vermelho claro para erros */
+    color: #721c24; /* Texto vermelho */
+    border: 1px solid #f5c6cb;
+}
+
+#result ul li.success {
+    background-color: #d4edda; /* Fundo verde claro para sucesso */
+    color: #155724; /* Texto verde */
+    border: 1px solid #c3e6cb;
+    font-weight: bold;
+}

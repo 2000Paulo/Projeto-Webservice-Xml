@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Validador de XML</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Validador de XML</h1>
+        <form id="xmlForm" aria-label="Formulário para validação de XML">
+            <label for="xmlType">Selecione o Método:</label>
+            <select id="xmlType" required>
+                <option value="" disabled selected>Escolha um tipo...</option>
+                <optgroup label="RPS e NFS-e">
+                    <option value="RecepcaoLoteRps">Recepção de Lote de RPS</option>
+                    <option value="CancelamentoNfse">Cancelamento de NFS-e</option>
+                    <option value="SubstituicaoNfse">Substituição de NFS-e</option>
+                </optgroup>
+                <optgroup label="Consultas">
+                    <option value="ConsultaNfsePorRps">Consulta de NFS-e por RPS</option>
+                    <option value="ConsultaLoteRps">Consulta de Lote de RPS</option>
+                    <option value="ConsultaNfseServicoPrestado">Consulta de NFS-e - Serviços Prestados</option>
+                    <option value="ConsultaNfseServicoTomado">Consulta de NFS-e - Serviços Tomados</option>
+                    <option value="ConsultaPorFaixaNfse">Consulta por Faixa de NFS-e</option>
+                </optgroup>
+            </select>
+
+            <label for="xmlFile">Carregue o arquivo XML:</label>
+            <input type="file" id="xmlFile" accept=".xml" required>
+
+            <button type="submit" aria-label="Validar arquivo XML">Validar</button>
+        </form>
+
+        <div id="result" class="result-container" aria-live="polite"></div>
+    </div>
+
+    <script src="main.js" type="module" defer></script>
+</body>
+</html>
