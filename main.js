@@ -106,7 +106,7 @@ function validateMethod(rootNode, xmlType) {
         RecepcaoLoteRps: 'EnviarLoteRpsEnvio',
         CancelamentoNfse: 'CancelarNfseEnvio',
         SubstituicaoNfse: 'SubstituirNfseEnvio',
-        ConsultaNfsePorRps: 'ConsultarNfsePorRpsEnvio',
+        ConsultaNfsePorRps: 'ConsultarNfseRpsEnvio',
         ConsultaLoteRps: 'ConsultarLoteRpsEnvio',
         ConsultaPorFaixaNfse: 'ConsultarNfseFaixaEnvio',
         ConsultaNfseServicoPrestado: 'ConsultarNfseServicoPrestadoEnvio',
@@ -172,19 +172,17 @@ function compareXml(userXml, method, rawXml) {
     const templateXml = new DOMParser().parseFromString(xmlTemplates[method], 'text/xml');
     const errors = [];
 
-    function getLineFromRawXml(tag, rawXml, value) {
-        const tagRegex = new RegExp(`<${tag}[^>]*>(.*?)<\\/${tag}>`, 'g');
+    function getLineFromRawXml(tag, rawXml) {
+        const tagRegex = new RegExp(`<${tag}[^>]*>`, 'g');
         let match;
         let line = 'desconhecida';
     
         // Iterar por todas as ocorrências da tag
         while ((match = tagRegex.exec(rawXml)) !== null) {
-            if (match[1].trim() === value.trim()) {
-                const index = match.index;
-                const lines = rawXml.substring(0, index).split('\n');
-                line = lines.length;
-                break;
-            }
+            const index = match.index;
+            const lines = rawXml.substring(0, index).split('\n');
+            line = lines.length;
+            break; // Retorna a primeira ocorrência
         }
     
         return line;
@@ -193,7 +191,7 @@ function compareXml(userXml, method, rawXml) {
     function validateNode(node1, node2, path = '') {
         if (!node1) {
             const isOptional = node2.hasAttribute('optional') && node2.getAttribute('optional') === 'true';
-            if (!isOptional) {
+            if (!isOptional && (!value || value === '')) {
                 const fullPath = `${path}/${node2.localName}`;
                 errors.push(`A tag obrigatória <${node2.localName}> está ausente no caminho ${fullPath}.`);
             }
@@ -211,7 +209,7 @@ function compareXml(userXml, method, rawXml) {
         if (!isOptional && (value === null || value === '')) {
             errors.push(`Erro na tag <${node1.localName}> na linha ${line}: O valor é obrigatório e não pode estar vazio.`);
         }
-    
+        
         // Validação de tipo
         if (type === 'N') {
             if (!/^\d+(\.\d+)?$/.test(value)) {
@@ -245,7 +243,23 @@ function compareXml(userXml, method, rawXml) {
                 errors.push(`Erro na tag <${node1.localName}> na linha ${line}: O valor excede ${maxLength} caracteres permitidos. Encontrado: "${value}".`);
             }
         }
-    
+        if (node1.localName === 'Aliquota') {
+            if (!/^\d{1,2}(\.\d{1,4})?$/.test(value)) {
+                errors.push(`Erro na tag <${node1.localName}> na linha ${line}: O valor deve estar no formato correto com no maximo dois inteiros e quatro decimais. Encontrado: "${value}".`);
+            }
+        }
+        // Validação de comprimento máximo (maxlength)
+        if (maxLength && value.length > maxLength) {
+            errors.push(`Erro na tag <${node1.localName}> na linha ${line}: O valor excede o máximo de ${maxLength} caracteres permitidos. Encontrado: "${value}".`);
+        }
+
+        if (type === 'N' && maxLength && maxLength.toString().includes(',')) {
+            const [integers, decimals] = maxLength.toString().split(',').map(Number);
+            const decimalRegex = new RegExp(`^\\d{1,${integers}}(\\.\\d{1,${decimals}})?$`);
+            if (!decimalRegex.test(value)) {
+                errors.push(`Erro na tag <${node1.localName}> na linha ${line}: O valor deve estar no formato correto com no máximo ${integers} inteiros e ${decimals} decimais. Encontrado: "${value}".`);
+            }
+        }
         // Validação dos filhos
         const children1 = Array.from(node1.children);
         const children2 = Array.from(node2.children);
