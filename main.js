@@ -171,6 +171,7 @@ function displayValidationResult(errors) {
 function compareXml(userXml, method, rawXml) {
     const templateXml = new DOMParser().parseFromString(xmlTemplates[method], 'text/xml');
     const errors = [];
+    const warnings = [];
 
     function getLineFromRawXml(tag, rawXml) {
         const tagRegex = new RegExp(`<${tag}[^>]*>`, 'g');
@@ -189,6 +190,7 @@ function compareXml(userXml, method, rawXml) {
     }
 
     function validateNode(node1, node2, path = '') {
+        const value = node1 ? node1.textContent.trim() : ''; // Inicializa 'value' mesmo quando 'node1' for null
         if (!node1) {
             const isOptional = node2.hasAttribute('optional') && node2.getAttribute('optional') === 'true';
             if (!isOptional && (!value || value === '')) {
@@ -198,8 +200,8 @@ function compareXml(userXml, method, rawXml) {
             return;
         }
     
+
         const type = node2.getAttribute('type');
-        const value = node1.textContent.trim(); // Remove espaços em branco no valor
         const line = getLineFromRawXml(node1.localName, rawXml, value);
         const length = parseInt(node2.getAttribute('length'), 10);
         const maxLength = parseInt(node2.getAttribute('maxlength'), 10);
@@ -247,10 +249,6 @@ function compareXml(userXml, method, rawXml) {
             if (!/^\d{1,2}(\.\d{1,4})?$/.test(value)) {
                 errors.push(`Erro na tag <${node1.localName}> na linha ${line}: O valor deve estar no formato correto com no maximo dois inteiros e quatro decimais. Encontrado: "${value}".`);
             }
-        }
-        // Validação de comprimento máximo (maxlength)
-        if (maxLength && value.length > maxLength) {
-            errors.push(`Erro na tag <${node1.localName}> na linha ${line}: O valor excede o máximo de ${maxLength} caracteres permitidos. Encontrado: "${value}".`);
         }
 
         if (type === 'N' && maxLength && maxLength.toString().includes(',')) {
