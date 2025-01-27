@@ -31,7 +31,7 @@ const SubstituicaoNfse = `<?xml version="1.0" encoding="UTF-8"?>
                     <Servico>
                         <Valores>
                             <ValorServicos type="N" maxlength="15" decimalPlaces="2">1000.00</ValorServicos>
-                            <Aliquota type="N" length="4,2" optional="true">2</Aliquota>
+                            <Aliquota type="N" maxlength="2,4" optional="true">2</Aliquota>
                         </Valores>
                         <Discriminacao type="C" length="2000">Descrição detalhada do serviço prestado</Discriminacao>
                         <CodigoMunicipio type="N" length="7">1234567</CodigoMunicipio>

@@ -41,7 +41,7 @@ const RecepcaoLoteRps = `<?xml version="1.0" encoding="UTF-8"?>
               <OutrasRetencoes type="N" maxlength="15" decimalPlaces="2" optional="true">0.00</OutrasRetencoes>
               <ValTotTributos type="N" maxlength="15" decimalPlaces="2" optional="true">0.00</ValTotTributos>
               <ValorIss type="N" maxlength="15" decimalPlaces="2" optional="true">5.00</ValorIss>
-              <Aliquota type="N" maxlength="4,2" optional="true">2.00</Aliquota>
+              <Aliquota type="N" maxlength="2,4" optional="true">2.00</Aliquota>
               <DescontoIncondicionado type="N" maxlength="15" decimalPlaces="2" optional="true">0.00</DescontoIncondicionado>
               <DescontoCondicionado type="N" maxlength="15" decimalPlaces="2" optional="true">0.00</DescontoCondicionado>
             </Valores>
