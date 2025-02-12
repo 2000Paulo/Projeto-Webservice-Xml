@@ -74,7 +74,7 @@ const RecepcaoLoteRps = `<?xml version="1.0" encoding="UTF-8"?>
               </CpfCnpj>
               <InscricaoMunicipal type="C" length="15" optional="true">123456</InscricaoMunicipal>
             </IdentificacaoTomador>
-            <NifTomador>tsNif[Opcional]</NifTomador>
+            <NifTomador type="C" length="40" optional="true">Descrição Nif</NifTomador>
             <RazaoSocial type="C" length="150" optional="true">Nome do Tomador</RazaoSocial>
             <Endereco>
               <Endereco type="C" length="255">Rua Exemplo</Endereco>
@@ -85,7 +85,7 @@ const RecepcaoLoteRps = `<?xml version="1.0" encoding="UTF-8"?>
               <Uf type="C" length="2">RJ</Uf>
               <Cep type="N" length="8">24900000</Cep>
             </Endereco>
-            <EnderecoExterior>
+            <EnderecoExterior optional="true">
               <CodigoPais type="N" length="4">1058</CodigoPais>
               <EnderecoCompletoExterior type="C" length="255">Endereço completo no exterior, incluindo rua, cidade e país.</EnderecoCompletoExterior>
             </EnderecoExterior>
@@ -93,8 +93,7 @@ const RecepcaoLoteRps = `<?xml version="1.0" encoding="UTF-8"?>
               <Email type="C" length="80" optional="true">exemplo@email.com</Email>
             </Contato>
           </TomadorServico>
-        </InfDeclaracaoPrestacaoServico>
-        <Intermediario optional="true">
+          <Intermediario optional="true">
           <IdentificacaoIntermediario>
             <CpfCnpj>
               <Cnpj type="N" length="14" optional="true">12345678000199</Cnpj>
@@ -151,6 +150,7 @@ const RecepcaoLoteRps = `<?xml version="1.0" encoding="UTF-8"?>
           <ValorDedutivel type="N" maxlength="15" decimalPlaces="2">100.00</ValorDedutivel>
           <ValorUtilizadoDeducao type="N" maxlength="15" decimalPlaces="2">50.00</ValorUtilizadoDeducao>
         </Deducao>
+        </InfDeclaracaoPrestacaoServico>
       </Rps>
     </ListaRps>
   </LoteRps>
