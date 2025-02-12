@@ -194,7 +194,7 @@ function compareXml(userXml, method, rawXml) {
         if (!node1) {
             const isOptional = node2.hasAttribute('optional') && node2.getAttribute('optional') === 'true';
             if (!isOptional && (!value || value === '')) {
-                const fullPath = `${path}/${node2.localName}`;
+                const fullPath = `${path}`;
                 errors.push(`A tag obrigatória <${node2.localName}> está ausente no caminho ${fullPath}.`);
             }
             return;
